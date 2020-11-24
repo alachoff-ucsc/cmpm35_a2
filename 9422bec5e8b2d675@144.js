@@ -49,6 +49,22 @@ Group Something: Asher Lachoff, Jennifer Honeywell`
   }
 }
 );
+// day cycle, no work >:(
+  /*
+  main.variable(observer("daycycle")).define("daycycle", function(){
+    if (day == undefined) {
+      day = 0
+    }
+    if (day > 4) {
+      day = 0
+      return(day)
+    }
+    else {
+      day += 1
+      return(day)
+    }
+    
+  }) */
 // x represents the data on the x axis, no need to mess with this. Width scales to window size, so there's no set value for it. 
   main.variable(observer("x")).define("x", ["d3","m","width"], function(d3,m,width){return(
 d3.scaleLinear([0, m - 1], [0, width])
@@ -66,6 +82,7 @@ d3.area()
     .x((d, i) => x(i))
     .y0(d => y(d[0]))
     .y1(d => y(d[1]))
+  
 )});
 // stack (probably) puts all of the lines on top of eachother. 
   main.variable(observer("stack")).define("stack", ["d3","n","offset"], function(d3,n,offset){return(
@@ -83,7 +100,7 @@ d3.stack()
   main.variable(observer("n")).define("n", function(){return(
 2
 )});
-// m controls the number of values represented on the X axis. Will have to make this dynamic somehow to compensate for the shifting number of "while" values from day to day. 
+// m controls the number of values represented on the X axis. 
   main.variable(observer("m")).define("m", function(){return(
 8
 )});
@@ -102,19 +119,21 @@ function sequencer() {
   return layers;
 }
 )});
+// gets pink panda data for top line
   main.variable(observer("pandata")).define("pandata", ["d3"], function(d3){return(
     d3.csv("toy_data_simplepanda.csv").then(function(myData) {
-      console.log(myData);
+      // console.log(myData);
       return(myData)
     })
   )});
+// gets plastic dinosaur data for bottom line
   main.variable(observer("dinodata")).define("dinodata", ["d3"], function(d3){return(
     d3.csv("toy_data_simpledino.csv").then(function(myData) {
-      console.log(myData);
+      // console.log(myData);
       return(myData)
     })
   )});
-  main.variable(observer("bumps")).define("bumps", function()
+  main.variable(observer("bumps")).define("bumps", ["pandata"], function(pandata)
 {
   // Inspired by Lee Byron’s test data generator. We need to replace this with our own data. 
   function bump(a, n) {
